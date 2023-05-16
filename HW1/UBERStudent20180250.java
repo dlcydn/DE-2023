@@ -20,7 +20,7 @@ public class UBERStudent20180250 {
 		private Text BaseNumber = new Text(); //key
 		private Text ActiveVehicles = new Text(); //value
 		
-		public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			
 			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
 			
@@ -33,14 +33,14 @@ public class UBERStudent20180250 {
 			while (itr.hasMoreTokens()) {
 				
 				String Basenum = itr.nextToken();
-				try { 
+				try { 	
 					date = df.parse(itr.nextToken());
 					cal.setTime(date);
 
 				} catch (Exception e) { 
 					e.printStackTrace();
 				}
-				BaseNumber.set(Basenum+","+week[cal.get(Calendar.DAY_OF_WEEK)]);
+				BaseNumber.set(Basenum+","+week[cal.get(Calendar.DAY_OF_WEEK-1)]);
 				
 				String trip = itr.nextToken();
 				String vehicle = itr.nextToken();
