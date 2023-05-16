@@ -93,10 +93,9 @@ public class UBERStudent20180250 {
 		Job job = new Job(conf, "UBER");
 		job.setJarByClass(UBERStudent20180250.class); 
 		job.setMapperClass(UBERMapper.class);
-		job.setCombinerClass(UBERReducer.class); 
 		job.setReducerClass(UBERReducer.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(Text.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1])); 
 		FileSystem.get(job.getConfiguration()).delete(new Path(otherArgs[1]));
