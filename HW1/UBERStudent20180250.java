@@ -1,16 +1,17 @@
-package hw1;
-
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.StringTokenizer;
-import java.util.random.RandomGenerator.ArbitrarilyJumpableGenerator;
+import java.util.*;
+import java.io.*;
+import java.text.*;
 
-import org.w3c.dom.Text;
-
-import hw1.IMDBStudent20180250.IMDBMapper;
-import hw1.IMDBStudent20180250.IMDBReducer;
-
+import org.apache.hadoop.conf.*;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.*;
+import org.apache.hadoop.mapreduce.lib.output.*;
+import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.fs.FSDataInputStream;
 
 public class UBERStudent20180250 {
 
@@ -33,13 +34,13 @@ public class UBERStudent20180250 {
 				
 				String Basenum = itr.nextToken();
 				try { 
-					
-					date = df.parse(cal.setTime(itr.nextToken()));
+					date = df.parse(itr.nextToken());
+					cal.setTime(date);
 
-				} catch (ParseException e) { 
+				} catch (Exception e) { 
 					e.printStackTrace();
 				}
-				BaseNumber.set(Basenum+","+week[date]);
+				BaseNumber.set(Basenum+","+week[cal.get(Calendar.DAY_OF_WEEK)]);
 				
 				String trip = itr.nextToken();
 				String vehicle = itr.nextToken();
@@ -56,10 +57,10 @@ public class UBERStudent20180250 {
 		private Text Base_key = new Text();
 		private Text Result_val = new Text();
 		
-		public void reduce (Text key, Text values, Context context) throws IOException, InterruptedException {
+		public void reduce (Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 			
-			int trip_sum; 
-			int vehicle_sum; 
+			int trip_sum = 0; 
+			int vehicle_sum = 0; 
 			
 			for (Text val : values) {
 			
@@ -79,11 +80,11 @@ public class UBERStudent20180250 {
 	}//reducer 
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		
 		Configuration conf = new Configuration();
-		String [] otherArgs = new GenericOptionsParser(conf, args).getRemainingsArgs();
+		String [] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
 			System.err.println("Usage : UBER <in> <out>"); 
 			System.exit(2);
@@ -94,7 +95,7 @@ public class UBERStudent20180250 {
 		job.setMapperClass(UBERMapper.class);
 		job.setCombinerClass(UBERReducer.class); 
 		job.setReducerClass(UBERReducer.class);
-		job.setOutpupKeyClass(Text.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1])); 
@@ -102,4 +103,4 @@ public class UBERStudent20180250 {
 		System.exit(job.waitForCompletion(true)?0:1);
 	}
 
-}
+}//UBER
