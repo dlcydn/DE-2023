@@ -1,7 +1,6 @@
-package hw1;
-
 import java.io.IOException;
 import java.util.*;
+import java.io.*;
 
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.FileSystem;
@@ -11,14 +10,14 @@ import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
-import org.w3c.dom.Text;
+import org.apache.hadoop.fs.FSDataInputStream;
 
 public class IMDBStudent20180250 {
 
 	public static class IMDBMapper extends Mapper<Object, Text, Text, IntWritable> {
 		
 		private final static IntWritable one = new IntWritable(1); 
-		private Text genre = new Text(); 
+		Text genre = new Text(); 
 		
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			
@@ -36,7 +35,7 @@ public class IMDBStudent20180250 {
 		
 	} //mapper
 	
-	public static class IMDBReducer extends Reducer <Test, IntWritable, Text, IntWritable> {
+	public static class IMDBReducer extends Reducer <Text, IntWritable, Text, IntWritable> {
 		
 		private IntWritable result = new IntWritable();
 		public void reduce (Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -48,16 +47,16 @@ public class IMDBStudent20180250 {
 			}
 			
 			result.set(sum); 
-			context(key, result); 
+			context.write(key, result); 
 		}//reduce 
 		
 	}//reducer 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 
 		Configuration conf = new Configuration();
-		String [] otherArgs = new GenericOptionsParser(conf, args).getRemainingsArgs();
+		String [] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
 			System.err.println("Usage : IMDB <in> <out>"); 
 			System.exit(2);
@@ -68,7 +67,7 @@ public class IMDBStudent20180250 {
 		job.setMapperClass(IMDBMapper.class);
 		job.setCombinerClass(IMDBReducer.class); 
 		job.setReducerClass(IMDBReducer.class);
-		job.setOutpupKeyClass(Text.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1])); 
