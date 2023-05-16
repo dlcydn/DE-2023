@@ -24,9 +24,12 @@ public class UBERStudent20180250 {
 			
 			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
 			
+			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
+			
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("mm/dd/yyyy"); 
+			
 			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df = new SimpleDateFormat("YYYY-MM-dd"); 
-			Date date = null;
 			
 			StringTokenizer itr = new StringTokenizer(value.toString(),",");
 			
@@ -40,6 +43,7 @@ public class UBERStudent20180250 {
 				} catch (Exception e) { 
 					e.printStackTrace();
 				}
+				
 				BaseNumber.set(Basenum+","+week[cal.get(Calendar.DAY_OF_WEEK-1)]);
 				
 				String trip = itr.nextToken();
@@ -47,6 +51,7 @@ public class UBERStudent20180250 {
 				ActiveVehicles.set(vehicle+","+trip);
 				
 				context.write(BaseNumber, ActiveVehicles);
+			}
 			}
 		}//map
 		
