@@ -69,8 +69,8 @@ public class UBERStudent20180250 {
 			
 				StringTokenizer itr = new StringTokenizer(val.toString(),",");
 				
-				trip_sum += Integer.parseInt(itr.nextToken().trim());
-				vehicle_sum += Integer.parseInt(itr.nextToken().trim());
+				trip_sum += Integer.parseInt(itr.nextToken());
+				vehicle_sum += Integer.parseInt(itr.nextToken());
 			
 			}
 					
