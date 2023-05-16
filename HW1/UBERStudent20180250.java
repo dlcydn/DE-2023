@@ -24,8 +24,6 @@ public class UBERStudent20180250 {
 			
 			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
 			
-			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
-			
 			Date date = new Date();
 			SimpleDateFormat df = new SimpleDateFormat("mm/dd/yyyy"); 
 			
