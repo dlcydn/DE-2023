@@ -22,15 +22,14 @@ public class UBERStudent20180250 {
 		
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			
-			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"}; 
-			
-			Date date = new Date();
+			Date date = null;
 			SimpleDateFormat df = new SimpleDateFormat("mm/dd/yyyy"); 
 			
 			Calendar cal = Calendar.getInstance();
 			
 			StringTokenizer itr = new StringTokenizer(value.toString(),",");
-			
+			int dayNum = 0;
+
 			while (itr.hasMoreTokens()) {
 				
 				String Basenum = itr.nextToken();
@@ -41,8 +40,9 @@ public class UBERStudent20180250 {
 				} catch (Exception e) { 
 					e.printStackTrace();
 				}
-				
-				BaseNumber.set(Basenum+","+week[cal.get(Calendar.DAY_OF_WEEK-1)]);
+			
+				dayNum = cal.get(Calendar.DAY_OF_WEEK);	
+				BaseNumber.set(Basenum+","+dayNum);
 				
 				String trip = itr.nextToken();
 				String vehicle = itr.nextToken();
@@ -50,7 +50,7 @@ public class UBERStudent20180250 {
 				
 				context.write(BaseNumber, ActiveVehicles);
 			}
-			}
+			
 		}//map
 		
 	} //mapper
@@ -61,20 +61,29 @@ public class UBERStudent20180250 {
 		private Text Result_val = new Text();
 		
 		public void reduce (Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-			
+		
+			String[] week = {"SUN","MON","THU","WED","THR","FRI","SAT"};	
+
 			int trip_sum = 0; 
 			int vehicle_sum = 0; 
-			
+			String baseName = ""; 
+			int dayNum = 0;
+
+
 			for (Text val : values) {
 			
 				StringTokenizer itr = new StringTokenizer(val.toString(),",");
-				
+				StringTokenizer itr2 = new StringTokenizer(key.toString(),",");
+
 				trip_sum += Integer.parseInt(itr.nextToken());
 				vehicle_sum += Integer.parseInt(itr.nextToken());
-			
+				
+				baseName = itr2.nextToken();
+				dayNum = Integer.parseInt(itr2.nextToken());
+
 			}
 					
-			Base_key.set(key);
+			Base_key.set(baseName+","+week[dayNum-1]);
 			Result_val.set(trip_sum+","+vehicle_sum);
 			context.write(Base_key, Result_val);
 			
