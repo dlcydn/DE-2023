@@ -22,8 +22,8 @@ public class IMDBStudent20180250 {
 		
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			
-			String s = value.toString();
-			String [] token = s.split("::"); 
+			String s = value.toString().replace("::", "~");
+			String [] token = s.split("~"); 
 			int len = token.length; 
 			StringTokenizer itr = new StringTokenizer(token[len-1],"|");
 			
