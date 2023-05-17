@@ -99,7 +99,7 @@ public class UBERStudent20180250
                         System.err.println("Usage: UBER <in> <out>");
                         System.exit(2);
                 }
-                Job job = new Job(conf, "UBER");
+                Job job = new Job(conf, "UBERStudent20180250");
                 job.setJarByClass(UBERStudent20180250.class);
                 job.setMapperClass(UBERMapper.class);
                 job.setReducerClass(UBERReducer.class);
