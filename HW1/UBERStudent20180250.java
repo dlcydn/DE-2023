@@ -22,17 +22,19 @@ public class UBERStudent20180250 {
                         StringTokenizer itr = new StringTokenizer(value.toString(), ",");
                         Text outputKey = new Text();
                         Text outputValue = new Text();
-                        String joinKey = "";
+                        String baseN = "";
                         String o_value = "";
                         String dateS = "";
+			
                         int year=0;
                         int month=0;
                         int day=0;
-                        String answer="";
+			
+                        String date="";
                         String vehicle="";
                         String trip="";
 
-                        joinKey=itr.nextToken();
+                        baseN=itr.nextToken();
                         dateS= itr.nextToken();
                         StringTokenizer itr3 = new StringTokenizer(dateS, "/");
                         month =Integer.parseInt(itr3.nextToken());
@@ -55,13 +57,14 @@ public class UBERStudent20180250 {
                         }else if (dayOfWeek.getValue() == 7) {
                                 answer = "SUN";
                         }
-                        joinKey = joinKey+","+answer;
-			outputKey.set( joinKey );
+                        baseN = baseN+","+date;
+			outputKey.set( baseN );
+			
                         vehicle = itr.nextToken();
                         trip = itr.nextToken();
                         outputValue.set( trip+","+vehicle );
+			
                         context.write( outputKey, outputValue );
-
 
                 }//map
                                                                                            
@@ -72,10 +75,12 @@ public class UBERStudent20180250 {
                 public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,InterruptedException
                 {
 			Text reduce_key = new Text();
-                        Text reduce_result = new Text();
+                        Text reduce_val = new Text();
+			
                         int sumT=0;
                         int sumV=0;
                         String result="";
+			
                         for (Text val : values)
                         {
                                 StringTokenizer itr2 = new StringTokenizer(val.toString(), ",");
@@ -84,10 +89,10 @@ public class UBERStudent20180250 {
                                 sumT +=tnum;
                                 sumV +=vnum;
                         }
+			
                         result= sumT+","+sumV;
-                        reduce_result.set(result);
-                        context.write(key, reduce_result);
-
+                        reduce_val.set(result);
+                        context.write(key, reduce_val);
 
                 }//reduce
         }//Recuder
