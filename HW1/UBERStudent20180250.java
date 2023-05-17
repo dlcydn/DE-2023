@@ -13,8 +13,8 @@ import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class UBERStudent20180250
-{
+public class UBERStudent20180250 {
+	
         public static class UBERMapper extends Mapper<Object, Text, Text, Text>
         {
                 public void map(Object key, Text value, Context context) throws IOException, InterruptedException
@@ -29,8 +29,8 @@ public class UBERStudent20180250
                         int month=0;
                         int day=0;
                         String answer="";
-                        String vehicles="";
-                        String trips="";
+                        String vehicle="";
+                        String trip="";
 
                         joinKey=itr.nextToken();
                         dateS= itr.nextToken();
@@ -57,39 +57,41 @@ public class UBERStudent20180250
                         }
                         joinKey = joinKey+","+answer;
 			outputKey.set( joinKey );
-                        vehicles = itr.nextToken();
-                        trips = itr.nextToken();
-                        outputValue.set( trips+","+vehicles );
+                        vehicle = itr.nextToken();
+                        trip = itr.nextToken();
+                        outputValue.set( trip+","+vehicle );
                         context.write( outputKey, outputValue );
 
 
-                }
+                }//map
                                                                                            
-	}
+	}//Mapper
+	
   	public static class UBERReducer extends Reducer<Text,Text,Text,Text>
         {
                 public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,InterruptedException
                 {
 			Text reduce_key = new Text();
                         Text reduce_result = new Text();
-                        int sum=0;
-                        int sum2=0;
+                        int sumT=0;
+                        int sumV=0;
                         String result="";
                         for (Text val : values)
                         {
                                 StringTokenizer itr2 = new StringTokenizer(val.toString(), ",");
-                                int n1 =Integer.parseInt(itr2.nextToken());
-                                int n2 =Integer.parseInt(itr2.nextToken());
-                                sum +=n1;
-                                sum2 +=n2;
+                                int tnum =Integer.parseInt(itr2.nextToken());
+                                int vnum =Integer.parseInt(itr2.nextToken());
+                                sumT +=tnum;
+                                sumV +=vnum;
                         }
-                        result= sum+","+sum2;
+                        result= sumT+","+sumV;
                         reduce_result.set(result);
                         context.write(key, reduce_result);
 
 
-                }
-        }
+                }//reduce
+        }//Recuder
+	
         public static void main(String[] args) throws Exception
         {
                 Configuration conf = new Configuration();
@@ -109,5 +111,5 @@ public class UBERStudent20180250
                 FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
                 FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
                 System.exit(job.waitForCompletion(true) ? 0 : 1);
-        }
-}
+        } //main
+}//UBER
