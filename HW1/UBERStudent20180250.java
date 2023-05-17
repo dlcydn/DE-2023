@@ -83,7 +83,7 @@ public class UBERStudent20180250
                                 t_sum +=tnum;
                                 v_sum +=vnum;
                         }
-                        result= sum+","+sum2;
+                        result= t_sum+","+v_sum;
                         reduce_result.set(result);
                         context.write(key, reduce_result);
 
