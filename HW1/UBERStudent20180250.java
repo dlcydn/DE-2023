@@ -46,7 +46,7 @@ public class UBERStudent20180250 {
 				
 				String trip = itr.nextToken();
 				String vehicle = itr.nextToken();
-				ActiveVehicles.set(vehicle+","+trip);
+				ActiveVehicles.set(trip+","+vehicle);
 				
 				context.write(BaseNumber, ActiveVehicles);
 			}
@@ -72,7 +72,7 @@ public class UBERStudent20180250 {
 
 			for (Text val : values) {
 			
-				StringTokenizer itr = new StringTokenizer(val.get(toString()),",");
+				StringTokenizer itr = new StringTokenizer(val.toString(),",");
 				StringTokenizer itr2 = new StringTokenizer(key.toString(),",");
 
 				trip_sum += Integer.parseInt(itr.nextToken());
