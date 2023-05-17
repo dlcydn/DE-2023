@@ -37,12 +37,15 @@ public class UBERStudent20180250
 
                         baseN=itr.nextToken();
                         dateS= itr.nextToken();
+			
                         StringTokenizer itr3 = new StringTokenizer(dateS, "/");
                         month =Integer.parseInt(itr3.nextToken());
                         day =Integer.parseInt(itr3.nextToken());
                         year = Integer.parseInt(itr3.nextToken());
+			
                         LocalDate date = LocalDate.of(year, month, day);
                         DayOfWeek dayOfWeek = date.getDayOfWeek();
+			
                         if(dayOfWeek.getValue() == 1) {
                         	dateN = "MON";
                         }else if (dayOfWeek.getValue() == 2) {
@@ -64,45 +67,53 @@ public class UBERStudent20180250
                         vehicle = itr.nextToken();
                         trip = itr.nextToken();
                         outputValue.set( trip+","+vehicle );
+			
                         context.write( outputKey, outputValue );
 
-
-                }
+                }//map
                                                                                            
-	}
+	}//mapper 
+	
   	public static class UBERReducer extends Reducer<Text,Text,Text,Text>
         {
                 public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,InterruptedException
                 {
-                		Text reduce_key = new Text();
+                	Text reduce_key = new Text();
                         Text reduce_val = new Text();
+			
                         int t_sum=0;
                         int v_sum=0;
                         String result="";
+			
                         for (Text val : values)
                         {
                                 StringTokenizer itr2 = new StringTokenizer(val.toString(), ",");
+				
                                 int tnum =Integer.parseInt(itr2.nextToken());
                                 int vnum =Integer.parseInt(itr2.nextToken());
+				
                                 t_sum += tnum;
                                 v_sum += vnum;
                         }
                         result= t_sum+","+v_sum;
                         reduce_val.set(result);
+			
                         context.write(key, reduce_val);
 
-
-                }
-        }
+                }//reduce
+        }//reducer 
+	
         public static void main(String[] args) throws Exception
         {
                 Configuration conf = new Configuration();
                 String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+		
                 if (otherArgs.length != 2)
                 {
                         System.err.println("Usage: UBER <in> <out>");
                         System.exit(2);
                 }
+		
                 Job job = new Job(conf, "UBERStudent20180250");
                 job.setJarByClass(UBERStudent20180250.class);
                 job.setMapperClass(UBERMapper.class);
@@ -113,5 +124,5 @@ public class UBERStudent20180250
                 FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
                 FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
                 System.exit(job.waitForCompletion(true) ? 0 : 1);
-        }
-}
+        }//main
+}//UBER
