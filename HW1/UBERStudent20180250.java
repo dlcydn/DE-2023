@@ -22,7 +22,7 @@ public class UBERStudent20180250
                         StringTokenizer itr = new StringTokenizer(value.toString(), ",");
                         Text outputKey = new Text();
                         Text outputValue = new Text();
-                        String baseN = "";
+                        String joinKey = "";
                         String o_value = "";
                         String dateS = "";
                         int year=0;
@@ -32,7 +32,7 @@ public class UBERStudent20180250
                         String vehicles="";
                         String trips="";
 
-                        baseN=itr.nextToken();
+                        joinKey=itr.nextToken();
                         dateS= itr.nextToken();
                         StringTokenizer itr3 = new StringTokenizer(dateS, "/");
                         month =Integer.parseInt(itr3.nextToken());
@@ -55,11 +55,11 @@ public class UBERStudent20180250
                         }else if (dayOfWeek.getValue() == 7) {
                                 answer = "SUN";
                         }
-                        baseN = baseN+","+answer;
-			outputKey.set( baseN );
-                        vehicle = itr.nextToken();
-                        trip = itr.nextToken();
-                        outputValue.set( trip+","+vehicle );
+                        joinKey = joinKey+","+answer;
+			outputKey.set( joinKey );
+                        vehicles = itr.nextToken();
+                        trips = itr.nextToken();
+                        outputValue.set( trips+","+vehicles );
                         context.write( outputKey, outputValue );
 
 
@@ -72,18 +72,18 @@ public class UBERStudent20180250
                 {
 			Text reduce_key = new Text();
                         Text reduce_result = new Text();
-                        int t_sum=0;
-                        int v_sum=0;
+                        int sum=0;
+                        int sum2=0;
                         String result="";
                         for (Text val : values)
                         {
                                 StringTokenizer itr2 = new StringTokenizer(val.toString(), ",");
-                                int tnum =Integer.parseInt(itr2.nextToken());
-                                int vnum =Integer.parseInt(itr2.nextToken());
-                                t_sum +=tnum;
-                                v_sum +=vnum;
+                                int n1 =Integer.parseInt(itr2.nextToken());
+                                int n2 =Integer.parseInt(itr2.nextToken());
+                                sum +=n1;
+                                sum2 +=n2;
                         }
-                        result= t_sum+","+v_sum;
+                        result= sum+","+sum2;
                         reduce_result.set(result);
                         context.write(key, reduce_result);
 
