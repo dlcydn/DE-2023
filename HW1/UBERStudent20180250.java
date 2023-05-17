@@ -13,8 +13,8 @@ import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class UBERStudent20180250 {
-	
+public class UBERStudent20180250
+{
         public static class UBERMapper extends Mapper<Object, Text, Text, Text>
         {
                 public void map(Object key, Text value, Context context) throws IOException, InterruptedException
@@ -22,19 +22,20 @@ public class UBERStudent20180250 {
                         StringTokenizer itr = new StringTokenizer(value.toString(), ",");
                         Text outputKey = new Text();
                         Text outputValue = new Text();
-                        String joinKey = "";
+                        
+                        String baseN = "";
                         String o_value = "";
                         String dateS = "";
-			
+                        
                         int year=0;
                         int month=0;
                         int day=0;
-			
-                        String answer="";
+                        
+                        String dateN="";
                         String vehicle="";
                         String trip="";
 
-                        joinKey=itr.nextToken();
+                        baseN=itr.nextToken();
                         dateS= itr.nextToken();
                         StringTokenizer itr3 = new StringTokenizer(dateS, "/");
                         month =Integer.parseInt(itr3.nextToken());
@@ -43,60 +44,56 @@ public class UBERStudent20180250 {
                         LocalDate date = LocalDate.of(year, month, day);
                         DayOfWeek dayOfWeek = date.getDayOfWeek();
                         if(dayOfWeek.getValue() == 1) {
-                                answer = "MON";
+                        	dateN = "MON";
                         }else if (dayOfWeek.getValue() == 2) {
-                                answer = "TUE";
+                        	dateN = "TUE";
                         }else if (dayOfWeek.getValue() == 3) {
-                                answer = "WED";
+                        	dateN = "WED";
                         }else if (dayOfWeek.getValue() == 4) {
-                                answer = "THR";
+                        	dateN = "THR";
                         }else if (dayOfWeek.getValue() == 5) {
-                                answer = "FRI";
+                        	dateN = "FRI";
                         }else if (dayOfWeek.getValue() == 6) {
-                                answer = "SAT";
+                        	dateN = "SAT";
                         }else if (dayOfWeek.getValue() == 7) {
-                                answer = "SUN";
+                        	dateN = "SUN";
                         }
-                        joinKey = joinKey+","+answer;
-			outputKey.set( joinKey );
-			
+                        baseN = baseN+","+dateN;
+                        outputKey.set( baseN );
+                        
                         vehicle = itr.nextToken();
                         trip = itr.nextToken();
                         outputValue.set( trip+","+vehicle );
-			
                         context.write( outputKey, outputValue );
 
-                }//map
+
+                }
                                                                                            
-	}//Mapper
-	
+	}
   	public static class UBERReducer extends Reducer<Text,Text,Text,Text>
         {
                 public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,InterruptedException
                 {
-			Text reduce_key = new Text();
-                        Text reduce_result = new Text();
-			
-                        int sumT=0;
-                        int sumV=0;
+                		Text reduce_key = new Text();
+                        Text reduce_val = new Text();
+                        int t_sum=0;
+                        int v_sum=0;
                         String result="";
-			
                         for (Text val : values)
                         {
                                 StringTokenizer itr2 = new StringTokenizer(val.toString(), ",");
                                 int tnum =Integer.parseInt(itr2.nextToken());
                                 int vnum =Integer.parseInt(itr2.nextToken());
-                                sumT +=tnum;
-                                sumV +=vnum;
+                                t_sum += tnum;
+                                v_sum += vnum;
                         }
-			
-                        result= sumT+","+sumV;
-                        reduce_result.set(result);
-                        context.write(key, reduce_result);
+                        result= t_sum+","+v_sum;
+                        reduce_val.set(result);
+                        context.write(key, reduce_val);
 
-                }//reduce
-        }//Recuder
-	
+
+                }
+        }
         public static void main(String[] args) throws Exception
         {
                 Configuration conf = new Configuration();
@@ -116,5 +113,5 @@ public class UBERStudent20180250 {
                 FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
                 FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
                 System.exit(job.waitForCompletion(true) ? 0 : 1);
-        } //main
-}//UBER
+        }
+}
