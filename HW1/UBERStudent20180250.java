@@ -22,7 +22,7 @@ public class UBERStudent20180250 {
                         StringTokenizer itr = new StringTokenizer(value.toString(), ",");
                         Text outputKey = new Text();
                         Text outputValue = new Text();
-                        String baseN = "";
+                        String joinKey = "";
                         String o_value = "";
                         String dateS = "";
 			
@@ -30,11 +30,11 @@ public class UBERStudent20180250 {
                         int month=0;
                         int day=0;
 			
-                        String date="";
+                        String answer="";
                         String vehicle="";
                         String trip="";
 
-                        baseN=itr.nextToken();
+                        joinKey=itr.nextToken();
                         dateS= itr.nextToken();
                         StringTokenizer itr3 = new StringTokenizer(dateS, "/");
                         month =Integer.parseInt(itr3.nextToken());
@@ -57,8 +57,8 @@ public class UBERStudent20180250 {
                         }else if (dayOfWeek.getValue() == 7) {
                                 answer = "SUN";
                         }
-                        baseN = baseN+","+date;
-			outputKey.set( baseN );
+                        joinKey = joinKey+","+answer;
+			outputKey.set( joinKey );
 			
                         vehicle = itr.nextToken();
                         trip = itr.nextToken();
@@ -75,7 +75,7 @@ public class UBERStudent20180250 {
                 public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,InterruptedException
                 {
 			Text reduce_key = new Text();
-                        Text reduce_val = new Text();
+                        Text reduce_result = new Text();
 			
                         int sumT=0;
                         int sumV=0;
@@ -91,8 +91,8 @@ public class UBERStudent20180250 {
                         }
 			
                         result= sumT+","+sumV;
-                        reduce_val.set(result);
-                        context.write(key, reduce_val);
+                        reduce_result.set(result);
+                        context.write(key, reduce_result);
 
                 }//reduce
         }//Recuder
