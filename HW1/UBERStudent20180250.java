@@ -44,8 +44,8 @@ public class UBERStudent20180250 {
 				dayNum = cal.get(Calendar.DAY_OF_WEEK);	
 				BaseNumber.set(Basenum+","+dayNum);
 				
-				String trip = itr.nextToken();
 				String vehicle = itr.nextToken();
+				String trip = itr.nextToken();
 				ActiveVehicles.set(trip+","+vehicle);
 				
 				context.write(BaseNumber, ActiveVehicles);
