@@ -66,7 +66,6 @@ class DoubleString implements WritableComparable {
 public class IMDBStudent20180250 {
 	
 	public static class MovieComparator implements Comparator<Movie>{
-		//rating을 기준으로 내림차순
 		public int compare(Movie x, Movie y) {
 			if (x.rate > y.rate) return 1;
 			if (x.rate < y.rate) return -1; 
