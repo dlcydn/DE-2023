@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.fs.FSDataInputStream;
 
-public class Movie{ 
+class Movie{ 
 	
 	public String movie;
 	public double rate;
@@ -66,6 +66,7 @@ class DoubleString implements WritableComparable {
 public class IMDBStudent20180250 {
 	
 	public static class MovieComparator implements Comparator<Movie>{
+		
 		public int compare(Movie x, Movie y) {
 			if (x.rate > y.rate) return 1;
 			if (x.rate < y.rate) return -1; 
@@ -171,8 +172,8 @@ public class IMDBStudent20180250 {
 	
 	public static class IMDBReducer extends Reducer< DoubleString, Text, Text, DoubleWritable > {
 		
-		private PriorityQueue<Info> queue;
-		private Comparator<Info> comp = new MovieComparator();
+		private PriorityQueue<Movie> queue;
+		private Comparator<Movie> comp = new MovieComparator();
 		private int topK;
 		
 		public void reduce(DoubleString key, Iterable< Text > values, Context context) throws IOException, InterruptedException {
@@ -203,7 +204,7 @@ public class IMDBStudent20180250 {
 		protected void setup(Context context) throws IOException, InterruptedException {
 			Configuration conf = context.getConfiguration();
 			topK = conf.getInt("topK", -1);
-			queue = new PriorityQueue<Info>( topK , comp);
+			queue = new PriorityQueue<Movie>( topK , comp);
 		}
 		
 		protected void cleanup(Context context) throws IOException, InterruptedException {
