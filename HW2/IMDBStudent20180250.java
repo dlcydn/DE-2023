@@ -216,7 +216,7 @@ public class IMDBStudent20180250 {
 		
 	}//reducer
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		Configuration conf = new Configuration();
 		
