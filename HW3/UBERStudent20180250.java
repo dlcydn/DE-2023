@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class UBERStudetn20180250 implements Serializable {
+public class UBERStudent20180250 implements Serializable {
 
 	public static String parseToString(int dayN) {
 		switch(dayN){
