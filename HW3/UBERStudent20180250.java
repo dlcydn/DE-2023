@@ -73,7 +73,7 @@ public class UBERStudent20180250 implements Serializable {
 				String key = sp[0] + "," + dayOfWeek;
 				String value = sp[3] + "," + sp[2];
 
-				System.out.println("[MAPPER] " + key + " " + value);
+				//System.out.println("key + " " + value);
 				return new Tuple2(key, value);
             }
 		});
@@ -86,7 +86,7 @@ public class UBERStudent20180250 implements Serializable {
                 int trips = Integer.valueOf(val1_sp[0]) + Integer.valueOf(val2_sp[0]);
                 int vehicles = Integer.valueOf(val1_sp[1]) + Integer.valueOf(val2_sp[1]);
        		
-	       	System.out.println(trips + "," + vehicles);	
+	       	//System.out.println(trips + "," + vehicles);	
                 return trips + "," + vehicles;
         }
 	});
